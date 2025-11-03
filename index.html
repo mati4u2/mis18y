@@ -1,1 +1,122 @@
-<h1>Probando Codespaces</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cumple 18 de Matías 🎉</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 🎥 VIDEO DE FONDO -->
+  <video id="background-video" autoplay muted loop playsinline webkit-playsinline>
+    <source src="ssstik.io_1762136246066.mp4" type="video/mp4">
+    Tu navegador no soporta video de fondo.
+  </video>
+
+  <!-- 🎶 MÚSICA AUTOMÁTICA -->
+  <audio id="bg-music" loop>
+    <source src="musicacum18.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- 🔊 Indicador de música -->
+  <div id="tap-to-play">🎵 Tocá para escuchar</div>
+
+  <div class="overlay">
+    <h1 class="titulo">🎂 Mis 18 Años 🎂</h1>
+    <h2 class="subtitulo">Nos vemos el <span class="resaltar">22 de noviembre</span></h2>
+
+    <!-- CONTADOR -->
+    <div id="countdown">
+      <div><span id="days">0</span><p>Días</p></div>
+      <div><span id="hours">0</span><p>Horas</p></div>
+      <div><span id="minutes">0</span><p>Minutos</p></div>
+      <div><span id="seconds">0</span><p>Segundos</p></div>
+    </div>
+
+    <!-- TEXTO DEL MAPA -->
+    <h3 class="map-text">📍 Nos vemos en...</h3>
+
+    <!-- MAPA -->
+    <div class="mapa">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3423.3687888731015!2d-55.5353569!3d-30.904314300000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a9fe60069b9547%3A0xf7ab0b459e52a343!2sJos%C3%A9%20Enrique%20Rod%C3%B3%201411%2C%2040000%20Rivera%2C%20Departamento%20de%20Rivera!5e0!3m2!1ses-419!2suy!4v1762137593692!5m2!1ses-419!2suy"
+      width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <!-- BOTÓN CONFIRMAR -->
+    <a href="https://walink.co/991443" class="btn" target="_blank">✅ Confirmar asistencia</a>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // 🎵 Iniciar música al tocar
+    const music = document.getElementById("bg-music");
+    const tapMessage = document.getElementById("tap-to-play");
+    let musicStarted = false;
+
+    function startMusic() {
+      if (!musicStarted) {
+        music.play().catch(() => {});
+        musicStarted = true;
+        tapMessage.style.opacity = "0";
+        setTimeout(() => (tapMessage.style.display = "none"), 800);
+      }
+    }
+
+    document.body.addEventListener("click", startMusic);
+    document.body.addEventListener("touchstart", startMusic);
+
+    // ⏱️ Contador
+    const countdownDate = new Date("November 21, 2025 23:59:59").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        document.getElementById("countdown").innerHTML = "🎉 ¡Llegó el gran día! 🎉";
+      }
+    }, 1000);
+
+    // 🎊 Confeti
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const confetti = Array.from({length: 100}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 2,
+      d: Math.random() * 1 + 1,
+      color: `hsl(${Math.random() * 360}, 100%, 60%)`
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      confetti.forEach(p => {
+        p.y += p.d;
+        if (p.y > canvas.height) p.y = 0;
+      });
+    }
+    setInterval(drawConfetti, 33);
+  </script>
+</body>
+</html>
